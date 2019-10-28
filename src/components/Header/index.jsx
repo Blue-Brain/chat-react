@@ -1,33 +1,62 @@
 import React from 'react';
-import { subscribeToMessager } from '../../api'
+import { subscribeToMessager } from '../../api';
+
 const INITIAL_STATE = {
     message:"No message",
     name: "No name",
-
+    top: true,
+    all_messages: []
 }
 
 class Header extends React.Component {
     constructor(props) {
         super(props);
         this.state = {...INITIAL_STATE };
+        this.elementMessages = React.createRef();
     }
-      onMessage = (e) => {
+
+    onMessage = (e) => {
+    this.setState({
+        message: e.target.value
+    })
+    }
+    onName = (e) => {
+    this.setState({
+        name: e.target.value
+    })
+    }
+    pushToAllMessage = (e) => {
+        e.preventDafult();
+        var arrayMessages=[];
+        arrayMessages.push(this.state.messageUser);
         this.setState({
-          message:e.target.value
+            all_messages: arrayMessages
         })
-      }
-      onName = (e) => {
-        this.setState({
-          name: e.target.value
-        })
-      }
-      onSendForm = (e) => {
+    }
+    onSendForm = (e) => {
         e.preventDefault();
+        console.log("BEGIN")
         subscribeToMessager({
-            name: this.state.name,
-            message: this.state.message,
-        })
-      }
+                name: this.state.name,
+                message: this.state.message,
+            }, data => this.setState({
+                messageUser: data
+            })
+        )   
+        this.pushToAllMessage(e);
+    }
+    componentDidUpdate(params) {
+        let el = this.findDOMNode();
+        if (this.state.top) {
+           this.setState({top: false});
+        } else {
+            this.pushToAllMessage(el);
+            if (!this.state.top) {
+              this.setState({top: true});
+           }
+        }
+    }    
+ 
     render () {
         return (
             <div>
@@ -39,7 +68,12 @@ class Header extends React.Component {
                     <div className="row">
                         <div className="col-6">
                             <h3>Форма сообщений</h3>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-                            <form id="messForm">
+                            <form 
+                                id="messForm" 
+                                action='http://localhost:8000' 
+                                method="POST"
+                                onSubmit={() => this.onSendForm()}
+                            >                                
                                 <label htmlFor="name">Имя</label>
                                 <input type="text" 
                                     name="name" 
@@ -49,7 +83,7 @@ class Header extends React.Component {
                                     onChange={this.onName}
                                 />
                                 <br/>
-                                <label for="message">Сообщения</label>
+                                <label htmlFor="message">Сообщения</label>
                                 <textarea 
                                     name="message" 
                                     id="message" 
@@ -59,14 +93,16 @@ class Header extends React.Component {
                                 />
                                 <br/>
                                 <button 
-                                    onClick={(e)=>this.onSendForm(e)} 
+                                    onClick={this.onSendForm}
                                     className="btn btn-danger"
                                 >Отправить</button>
                             </form>
                         </div>
                         <div className="col-6">
                             <h3>Сообщения</h3>
-                            <div id="all_mess"></div>
+                            <div id="all_mess" ref={this.elementMessages}>
+                                {/* сюда вставлять сообщения */}
+                            </div>
                         </div>
                     </div>
                 </div>
