@@ -25,8 +25,8 @@ class Header extends React.Component {
         name: e.target.value
     })
     }
-    pushToAllMessage = (e) => {
-        e.preventDafult();
+    pushToAllMessage = () => {
+        // e.preventDafult();
         var arrayMessages=[];
         arrayMessages.push(this.state.messageUser);
         this.setState({
@@ -39,24 +39,14 @@ class Header extends React.Component {
         subscribeToMessager({
                 name: this.state.name,
                 message: this.state.message,
-            }, data => this.setState({
-                messageUser: data
-            })
+            }, data => {
+                this.setState({
+                    messageUser: data
+                })
+            }
         )   
         this.pushToAllMessage(e);
     }
-    componentDidUpdate(params) {
-        let el = this.findDOMNode();
-        if (this.state.top) {
-           this.setState({top: false});
-        } else {
-            this.pushToAllMessage(el);
-            if (!this.state.top) {
-              this.setState({top: true});
-           }
-        }
-    }    
- 
     render () {
         return (
             <div>
@@ -72,7 +62,7 @@ class Header extends React.Component {
                                 id="messForm" 
                                 action='http://localhost:8000' 
                                 method="POST"
-                                onSubmit={() => this.onSendForm()}
+                                onSubmit={(e) => this.onSendForm(e)}
                             >                                
                                 <label htmlFor="name">Имя</label>
                                 <input type="text" 
@@ -93,7 +83,7 @@ class Header extends React.Component {
                                 />
                                 <br/>
                                 <button 
-                                    onClick={this.onSendForm}
+                                    onClick={(e) => this.onSendForm(e)}
                                     className="btn btn-danger"
                                 >Отправить</button>
                             </form>
