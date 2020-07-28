@@ -1,10 +1,9 @@
 import React from 'react';
 
-const Header = () => {
+const Header = ({ userName }) => {
     return (
         <div className="py-5 text-center">
-            <h2>Чат программа на REACT</h2>
-            <p className="lead">Укажите ваше имя и начинайте переписку</p>
+            <h2>Добро пожаловать, {userName} </h2>
         </div>
     )
 }
