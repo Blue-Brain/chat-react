@@ -3,15 +3,15 @@ import Message from './Message';
 
 const Messages = ({ messages }) => {
     const renderMessages = () => {
-        let render = messages.map((msg) => {
+        let render = messages.map((msg, i) => {
             return (
-                <p> 
+                <div key={i}> 
                     <Message 
                         userName={msg.name} 
                         message={msg.message}
                         dateTime={msg.date}
                     />
-                </p>
+                </div>
             )
         })
         return render

@@ -1,31 +1,25 @@
-let express = require('express');
-let app = express();
-let server = require('http').createServer(app);
-let io = require('socket.io').listen(server);
-let cors = require('cors');
+const express = require('express');
+const app = express();
+const server = require('http').createServer(app);
+const socket_io = require('socket.io');
+const io = socket_io(server);
 
-
-server.listen(8000);
-
-app.use(cors())
-
-users = [];
-connections = [];
-
-io.sockets.on('connection', function (socket) {
-    console.log("Успешное соединение: " + socket.id);
-    connections.push(socket);
+io.on('connection', function (socket) {
+    console.log("Успешное подключение: " + socket.id)
     socket.on('disconnect', function(data) {
-        connections.splice(connections.indexOf(socket), 1);
         console.log("Отключились: " + socket.id);
     })
-    
-    socket.on("send mess", function(data) {
+    socket.emit("your id", socket.id)
+
+    socket.on("send message", function(data) {
         console.log("data: ", data)
-        socket.broadcast.emit("add mess",  {
+        const obj = {
             message: data.message, 
             name: data.name, 
             date: data.date 
-        })
+        }
+        io.emit("message", obj)
     })
 })
+
+server.listen(8000);
