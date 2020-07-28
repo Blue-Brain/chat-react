@@ -9,6 +9,7 @@ const Messages = ({ messages }) => {
                     <Message 
                         userName={msg.name} 
                         message={msg.message}
+                        dateTime={msg.date}
                     />
                 </p>
             )

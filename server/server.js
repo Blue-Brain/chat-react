@@ -22,6 +22,10 @@ io.sockets.on('connection', function (socket) {
     
     socket.on("send mess", function(data) {
         console.log("data: ", data)
-        socket.broadcast.emit("add mess",  {message: data.message, name: data.name})
+        socket.broadcast.emit("add mess",  {
+            message: data.message, 
+            name: data.name, 
+            date: data.date 
+        })
     })
 })

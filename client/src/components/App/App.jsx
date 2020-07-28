@@ -6,7 +6,7 @@ import FormSend from '../FormSend/FormSend';
 const App = () => {
   const refMessages = useRef(null);
   const refName = useRef(null);
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState("Dima");
   const [messages, setMessages] = useState([]);
 
   const enterName = () => {

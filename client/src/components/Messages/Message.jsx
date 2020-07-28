@@ -1,13 +1,16 @@
 import React from 'react';
 
-const Message = ({ userName, message }) => {
+const Message = ({ userName, message, dateTime }) => {
     return (
-        <>
-            <b>{ userName }: </b>
-            <span>
-                {message}
-            </span>
-        </>
+        <div className="d-flex justify-content-between">  
+            <div>
+                <b>{ userName }: </b>
+                <span>
+                    {message}
+                </span>
+            </div>
+            <i>{dateTime}</i>
+        </div>
     )
 }
 

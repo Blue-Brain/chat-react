@@ -8,9 +8,12 @@ const FormSend = ({ userName, setMessages }) => {
 
     const onSendForm = (e) => {
         e.preventDefault();
+        const date = new Date();
+        console.log()
         const newMessage = {
             name: userName,
-            message: refForm.current.value
+            message: refForm.current.value,
+            date: date.toString().split(" ").slice(1, 5).join("/"),
         }
         socket.emit("send mess", newMessage);
         setMessage([newMessage]);
