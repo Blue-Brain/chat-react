@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 
-const FormSend = ({ userName, yourID, socketRef }) => {
+const FormSend = ({ userName, yourID, socketRef, room }) => {
     const refForm = useRef(null);
 
     const onSendForm = (e) => {
@@ -11,6 +11,7 @@ const FormSend = ({ userName, yourID, socketRef }) => {
             name: userName,
             message: refForm.current.value,
             date: date.toString().split(" ").slice(1, 5).join("/"),
+            room: room
         }
         socketRef.current.emit("send message", newMessage);
     }
