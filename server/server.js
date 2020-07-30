@@ -17,8 +17,14 @@ io.on("connection", function(socket) {
       return callback("Некорректные данные");
     }
 
-    socket.join(data.room);
-    callback({ userID: socket.id });
+    let room = socket.handshake['query']['r_var'];
+    console.log (room)
+
+    socket.join(room);
+    callback({ 
+      userID: socket.id, 
+      pathRoom: room
+    });
     socket.emit(
       "message",
       helper("notification", `Добро пожаловать, ${data.name}.`)
