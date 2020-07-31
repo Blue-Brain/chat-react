@@ -2,9 +2,12 @@ const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
 const socket_io = require("socket.io");
+const { userInfo } = require("os");
 const io = socket_io(server);
 
 const helper = (name, message) => ({ name, message });
+
+let usersOnline = [];
 
 io.on("connection", function(socket) {
   console.log("Успешное подключение: " + socket.id);
@@ -17,13 +20,18 @@ io.on("connection", function(socket) {
       return callback("Некорректные данные");
     }
 
-    let room = socket.handshake['query']['r_var'];
+    let room = socket.handshake.query.room;
+    let name = socket.handshake.query.username;
     console.log (room)
+    console.log (name)
 
     socket.join(room);
+    usersOnline.push({name:name, room: room});
+    console.log(socket.adapter.rooms)
     callback({ 
       userID: socket.id, 
-      pathRoom: room
+      pathRoom: room,
+      usersOnline: usersOnline
     });
     socket.emit(
       "message",
